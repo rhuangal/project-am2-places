@@ -23,4 +23,27 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
+
+    <string name="intro_message">
+        <![CDATA[
+
+            Busque sus lugares favoritos en nuestra aplicacion.
+        ]]>
+    </string>
+
+    <string name="selected_place">Lugar elegido:</string>
+    <string name="place_details">
+    <![CDATA[
+        <b>%1$s</b>
+        <br/>
+        <i>Id de lugar: %2$s</i>
+        <br/>
+        Direccion: %3$s
+        <br/>
+        Telefono: %4$s
+        <br/>
+        Website: %5$s
+    ]]>
+    </string>
+
 </resources>

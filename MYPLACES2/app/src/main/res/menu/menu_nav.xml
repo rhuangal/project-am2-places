@@ -14,10 +14,6 @@
             android:title="@string/menu_02" />
 
         <item
-            android:id="@+id/menu3"
-            android:checked="false"
-            android:title="@string/menu_03" />
-        <item
         android:id="@+id/menu4"
         android:checked="false"
         android:title="@string/menu_04" />

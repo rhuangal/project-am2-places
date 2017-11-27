@@ -37,6 +37,7 @@ public class PointOnMapFragment extends Fragment implements OnMapReadyCallback{
 
     private static final String ARG_LAT = "lat";
     private static final String ARG_LON = "lon";
+    private static final String ARG_NAME = "name";
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -44,6 +45,7 @@ public class PointOnMapFragment extends Fragment implements OnMapReadyCallback{
 
     private double lat;
     private double lon;
+    private String name;
 
     MapView mMapView;
 
@@ -81,19 +83,19 @@ public class PointOnMapFragment extends Fragment implements OnMapReadyCallback{
             mParam2 = getArguments().getString(ARG_PARAM2);
             lat = getArguments().getDouble(ARG_LAT);
             lon = getArguments().getDouble(ARG_LON);
+            name = getArguments().getString(ARG_NAME);
         }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        //return inflater.inflate(R.layout.fragment_point_on_map, container, false);
+
         View v = inflater.inflate(R.layout.fragment_point_on_map, container, false);
 
         mMapView = (MapView) v.findViewById(R.id.mapView);
         mMapView.onCreate(savedInstanceState);
-        mMapView.onResume();// needed to get the map to display immediately
+        mMapView.onResume();
 
         try {
 
@@ -110,11 +112,9 @@ public class PointOnMapFragment extends Fragment implements OnMapReadyCallback{
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        // Add a marker in Sydney, Australia,
-        // and move the map's camera to the same location.
         LatLng sydney = new LatLng(lat, lon);
         googleMap.addMarker(new MarkerOptions().position(sydney)
-                .title("Marker in Sydney"));
+                .title(name));
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, 14.0f));
 
     }
@@ -123,29 +123,7 @@ public class PointOnMapFragment extends Fragment implements OnMapReadyCallback{
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        /*SupportMapFragment mapFragment = (SupportMapFragment) getContext().get
-                .findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);*/
-        //initilizeMap();
     }
-
-    /*private void initilizeMap()
-    {
-        SupportMapFragment mSupportMapFragment = (SupportMapFragment) getFragmentManager().findFragmentById(R.id.map);
-        if (mSupportMapFragment == null) {
-            FragmentManager fragmentManager = getFragmentManager();
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            mSupportMapFragment = SupportMapFragment.newInstance();
-            fragmentTransaction.replace(R.id.map, mSupportMapFragment).commit();
-        }
-        if (mSupportMapFragment != null)
-        {
-            mSupportMapFragment.getMapAsync(this);
-        }
-    }*/
-
-
-
 
     @Override
     public void onAttach(Context context) {

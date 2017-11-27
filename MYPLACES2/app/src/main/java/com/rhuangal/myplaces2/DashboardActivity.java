@@ -1,6 +1,7 @@
 package com.rhuangal.myplaces2;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -13,7 +14,10 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.rhuangal.myplaces2.data.prefs.PreferencesHelper;
 import com.rhuangal.myplaces2.ui.fragments.CategoriaFragment;
+import com.rhuangal.myplaces2.ui.fragments.FavoritosFragment;
+import com.rhuangal.myplaces2.ui.fragments.SearchFragment;
 import com.rhuangal.myplaces2.ui.listeners.OnNavListener;
 
 
@@ -56,13 +60,13 @@ public class DashboardActivity extends AppCompatActivity implements OnNavListene
 
                     //Replacing the main content with ContentFragment Which is our Inbox View;
                     case R.id.menu1:
-                        //startFragment(new SearchFragment());
+                        startFragment(new SearchFragment());
                         return true;
                     case R.id.menu2:
-                        //startFragment(new DesarrolloFragment());
+                        startFragment(new FavoritosFragment());
                         return true;
-                    case R.id.menu3:
-                        return true;
+                    /*case R.id.menu3:
+                        return true;*/
                     case R.id.menu4:
                         startFragment(new CategoriaFragment());
                         return true;
@@ -112,6 +116,7 @@ public class DashboardActivity extends AppCompatActivity implements OnNavListene
     }
 
     public void gotoLogin() {
+        PreferencesHelper.signOut(this);
         Intent intent= new Intent(this,LoginActivity.class);
         startActivity(intent);
     }

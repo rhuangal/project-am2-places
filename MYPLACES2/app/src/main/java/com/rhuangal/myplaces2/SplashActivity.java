@@ -6,6 +6,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.KeyEvent;
 
+import com.rhuangal.myplaces2.data.prefs.PreferencesHelper;
+
 public class SplashActivity extends Activity {
 
     /** Check if the app is running. */
@@ -71,7 +73,12 @@ public class SplashActivity extends Activity {
         if (isRunning)
         {
             isRunning = false;
-            Intent i = new Intent(SplashActivity.this, LoginActivity.class);
+            Intent i;
+            if(PreferencesHelper.isSignedIn(this)){
+                i = new Intent(SplashActivity.this, DashboardActivity.class);
+            } else{
+                i = new Intent(SplashActivity.this, LoginActivity.class);
+            }
             i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(i);
             finish();

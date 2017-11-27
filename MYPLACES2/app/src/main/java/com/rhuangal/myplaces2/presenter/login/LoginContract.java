@@ -13,6 +13,8 @@ public class LoginContract {
         void gotoUserRegister();
         void showMessage(String message);
 
+        void saveSession(String id, String pass, String email);
+
         boolean validateForm();
 
         String getUsername();

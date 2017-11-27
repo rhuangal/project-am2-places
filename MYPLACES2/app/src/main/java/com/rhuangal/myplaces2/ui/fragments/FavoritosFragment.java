@@ -15,9 +15,9 @@ import android.widget.Toast;
 
 import com.rhuangal.myplaces2.R;
 import com.rhuangal.myplaces2.data.network.ApiClient;
-import com.rhuangal.myplaces2.data.network.entity.RecomendadosResponse;
-import com.rhuangal.myplaces2.ui.adapters.CategoriaAdapter;
-import com.rhuangal.myplaces2.ui.adapters.RecomendadosAdapter;
+import com.rhuangal.myplaces2.data.network.entity.FavoritosResponse;
+import com.rhuangal.myplaces2.data.prefs.PreferencesHelper;
+import com.rhuangal.myplaces2.ui.adapters.FavoritosAdapter;
 import com.rhuangal.myplaces2.ui.listeners.OnNavListener;
 
 import java.util.ArrayList;
@@ -30,29 +30,26 @@ import retrofit2.Response;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link OnNavListener} interface
+ * {@link com.rhuangal.myplaces2.ui.listeners.OnNavListener} interface
  * to handle interaction events.
- * Use the {@link RecomendadosFragment#newInstance} factory method to
+ * Use the {@link FavoritosFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class RecomendadosFragment extends Fragment {
+public class FavoritosFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-    private static final String ARG_ID_CAT = "id_cat";
 
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-    private int id_cat;
 
     private OnNavListener mListener;
 
-    private ListView lvRecomendados;
-    private RecomendadosAdapter recomendadosAdapter;
+    private ListView lvFavoritos;
 
-    public RecomendadosFragment() {
+    public FavoritosFragment() {
         // Required empty public constructor
     }
 
@@ -62,11 +59,11 @@ public class RecomendadosFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment RecomendadosFragment.
+     * @return A new instance of fragment FavoritosFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static RecomendadosFragment newInstance(String param1, String param2) {
-        RecomendadosFragment fragment = new RecomendadosFragment();
+    public static FavoritosFragment newInstance(String param1, String param2) {
+        FavoritosFragment fragment = new FavoritosFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -80,7 +77,6 @@ public class RecomendadosFragment extends Fragment {
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
-            id_cat = getArguments().getInt(ARG_ID_CAT);
         }
     }
 
@@ -88,44 +84,44 @@ public class RecomendadosFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_recomendados, container, false);
+        return inflater.inflate(R.layout.fragment_favoritos, container, false);
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        final List<RecomendadosResponse> listCategorias = new ArrayList<>();
+        final List<FavoritosResponse> listCategorias = new ArrayList<>();
 
-        lvRecomendados = (ListView) getView().findViewById(R.id.lvRecomendados);
+        lvFavoritos = (ListView) getView().findViewById(R.id.lvFavoritos);
 
-        Call<List<RecomendadosResponse>> call= ApiClient.getMyApiClient().getRecomendadosByCat("id_cat="+String.valueOf(id_cat));
+        Call<List<FavoritosResponse>> call= ApiClient.getMyApiClient().getFavoritos("ownerId="+ PreferencesHelper.getIdSession(getContext()));
         final ProgressDialog dialog;
         /**
          * Progress Dialog for User Interaction
          */
         dialog = new ProgressDialog(getContext());
-        dialog.setTitle("Cargando Recomendados");
+        dialog.setTitle("Cargando Favoritos");
         dialog.setMessage("Espere por favor");
         dialog.show();
-        call.enqueue(new Callback<List<RecomendadosResponse>>() {
+        call.enqueue(new Callback<List<FavoritosResponse>>() {
             @Override
-            public void onResponse(Call<List<RecomendadosResponse>> call, Response<List<RecomendadosResponse>> response) {
+            public void onResponse(Call<List<FavoritosResponse>> call, Response<List<FavoritosResponse>> response) {
                 dialog.dismiss();
                 if(response!=null){
-                    List<RecomendadosResponse> recomendados =null;
+                    List<FavoritosResponse> Favoritos =null;
                     if(response.isSuccessful()){
-                        recomendados = response.body();
-                        if(recomendados!=null){
-                            Log.i("CONSOLE", "TAMAÑO DE CAT: "+recomendados.size());
-                            for(RecomendadosResponse rec: recomendados) {
+                        Favoritos = response.body();
+                        if(Favoritos!=null){
+                            Log.i("CONSOLE", "TAMAÑO DE CAT: "+Favoritos.size());
+                            for(FavoritosResponse rec: Favoritos) {
                                 listCategorias.add(rec);
                             }
-                            recomendadosAdapter=  new RecomendadosAdapter(getContext(), listCategorias);
-                            lvRecomendados.setAdapter(recomendadosAdapter);
+                            FavoritosAdapter favoritosAdapter =  new FavoritosAdapter(getContext(), listCategorias);
+                            lvFavoritos.setAdapter(favoritosAdapter);
                         }
                     }else{
-                        Log.v("CONSOLE", "error "+recomendados);
+                        Log.v("CONSOLE", "error "+Favoritos);
                     }
                 }else{
 
@@ -133,14 +129,14 @@ public class RecomendadosFragment extends Fragment {
             }
 
             @Override
-            public void onFailure(Call<List<RecomendadosResponse>> call, Throwable t) {
+            public void onFailure(Call<List<FavoritosResponse>> call, Throwable t) {
                 dialog.dismiss();
                 Toast.makeText(getContext(),
                         "error "+t.getMessage(),Toast.LENGTH_LONG).show();
             }
         });
 
-        lvRecomendados.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        lvFavoritos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Toast.makeText(getContext(),
@@ -149,7 +145,7 @@ public class RecomendadosFragment extends Fragment {
                 PointOnMapFragment recfragment = new PointOnMapFragment();
                 Bundle args = new Bundle();
                 args.putDouble("lat", listCategorias.get(position).getLat());
-                args.putDouble("lon", listCategorias.get(position).getLng());
+                args.putDouble("lon", listCategorias.get(position).getLon());
                 args.putString("name", listCategorias.get(position).getName());
                 recfragment.setArguments(args);
                 getActivity().getSupportFragmentManager().beginTransaction()
@@ -161,7 +157,6 @@ public class RecomendadosFragment extends Fragment {
         });
 
     }
-
 
     @Override
     public void onAttach(Context context) {
@@ -180,4 +175,4 @@ public class RecomendadosFragment extends Fragment {
         mListener = null;
     }
 
- }
+}

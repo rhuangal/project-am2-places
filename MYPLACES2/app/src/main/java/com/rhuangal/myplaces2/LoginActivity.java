@@ -9,6 +9,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.rhuangal.myplaces2.data.prefs.PreferencesHelper;
 import com.rhuangal.myplaces2.presenter.login.LoginContract;
 import com.rhuangal.myplaces2.presenter.login.LoginPresenter;
 
@@ -86,6 +87,11 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
     public void showMessage(String message) {
         Toast.makeText(LoginActivity.this,
                 "LogIn "+message,Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void saveSession(String id, String pass, String email) {
+        PreferencesHelper.saveSession(this, email, pass, id);
     }
 
     @Override

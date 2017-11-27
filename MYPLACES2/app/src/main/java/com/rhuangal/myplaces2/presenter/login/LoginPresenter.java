@@ -53,6 +53,7 @@ public class LoginPresenter {
                     if(response.isSuccessful()){
                         logInResponse=response.body();
                         if(logInResponse!=null){
+                            view.saveSession(logInResponse.getObjectId(), login.getPassword(), login.getLogin());
                             view.showMessage("login "+logInResponse.getName());
                             view.gotoMain();
                         }

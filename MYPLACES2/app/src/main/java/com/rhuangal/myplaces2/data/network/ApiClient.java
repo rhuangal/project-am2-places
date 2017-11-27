@@ -3,6 +3,8 @@ package com.rhuangal.myplaces2.data.network;
 
 
 import com.rhuangal.myplaces2.data.network.entity.CategoriaResponse;
+import com.rhuangal.myplaces2.data.network.entity.Favoritos;
+import com.rhuangal.myplaces2.data.network.entity.FavoritosResponse;
 import com.rhuangal.myplaces2.data.network.entity.Login;
 import com.rhuangal.myplaces2.data.network.entity.LoginResponse;
 import com.rhuangal.myplaces2.data.network.entity.RecomendadosResponse;
@@ -74,6 +76,12 @@ public class ApiClient {
 
         @GET("data/recomendados")
         Call<List<RecomendadosResponse>> getRecomendadosByCat(@Query("where") String where);
+
+        @POST("data/favoritos")
+        Call<FavoritosResponse> saveFavoritos(@Body Favoritos raw);
+
+        @GET("data/favoritos")
+        Call<List<FavoritosResponse>> getFavoritos(@Query("where") String where);
 
     }
 
